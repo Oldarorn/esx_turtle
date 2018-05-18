@@ -92,10 +92,10 @@ local function TransformTurtle(source)
 
 			if meatQuantity > 50 then
 				TriggerClientEvent('esx:showNotification', source, _U('too_many_meat'))
-			elseif turtleQuantity < 10 then
+			elseif turtleQuantity < 5 then
 				TriggerClientEvent('esx:showNotification', source, _U('not_enough_turtle'))
 			else
-				xPlayer.removeInventoryItem('turtle', 10)
+				xPlayer.removeInventoryItem('turtle', 5)
 				xPlayer.addInventoryItem('turtle_meat', 1)
 			
 				TransformTurtle(source)
