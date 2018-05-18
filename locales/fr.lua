@@ -12,5 +12,5 @@ Locales['fr'] = {
 	['inv_full_turtle'] = 'vous ne pouvez plus capturer de tortue, votre inventaire est ~r~plein~s~',
     ['not_enough_turtle'] = 'vous n\'avez pas assez de tortue à ~r~découper~s~',
     ['sold_one_turtle'] = 'vous avez vendu ~g~un sac de viande de tortue~s~',
-
+    ['exit_marker'] = 'Appuyez sur ~INPUT_CONTEXT~ pour annuler ~y~l\'action~s~',
 }

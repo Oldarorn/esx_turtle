@@ -18,3 +18,4 @@
 
     - You can change every coordinates in config.lua
     - You can set how many cops are needed to "activate" this illegal road.
+    - You can set all times in config.lua (time to farm/harvest/sell)

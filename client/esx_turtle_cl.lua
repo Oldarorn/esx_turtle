@@ -21,6 +21,7 @@ local PlayerData 				= {}
 local GUI 						= {}
 local HasAlreadyEnteredMarker   = false
 local LastZone                  = nil
+local isInZone                  = false
 local CurrentAction             = nil
 local CurrentActionMsg          = ''
 local CurrentActionData         = {}
@@ -35,6 +36,12 @@ end)
 AddEventHandler('esx_turtle:hasEnteredMarker', function(zone)
 
         ESX.UI.Menu.CloseAll()
+
+        if zone == 'exitMarker' then
+            CurrentAction     = zone
+            CurrentActionMsg  = _U('exit_marker')
+            CurrentActionData = {}
+        end
 
         --turtle process
         if zone == 'TurtleFarm' then
@@ -107,7 +114,7 @@ end)
 Citizen.CreateThread(function()
     while true do
 
-        Wait(0)
+        Citizen.Wait(10)
 
         local coords      = GetEntityCoords(GetPlayerPed(-1))
         local isInMarker  = false
@@ -120,42 +127,61 @@ Citizen.CreateThread(function()
             end
         end
 
-        if isInMarker and not hasAlreadyEnteredMarker then
-            hasAlreadyEnteredMarker = true
-            lastZone                = currentZone
+        if isInMarker and not HasAlreadyEnteredMarker then
+            HasAlreadyEnteredMarker = true
+            LastZone				= currentZone
             TriggerServerEvent('esx_turtle:GetUserInventory', currentZone)
         end
 
-        if not isInMarker and hasAlreadyEnteredMarker then
-            hasAlreadyEnteredMarker = false
-            TriggerEvent('esx_turtle:hasExitedMarker', lastZone)
+        if not isInMarker and HasAlreadyEnteredMarker then
+            HasAlreadyEnteredMarker = false
+            TriggerEvent('esx_turtle:hasExitedMarker', LastZone)
+        end
+
+        if isInMarker and isInZone then
+            TriggerEvent('esx_turtle:hasEnteredMarker', 'exitMarker')
         end
 
     end
 end)
 
 
-
 -- Key Controls
 Citizen.CreateThread(function()
     while true do
-        Citizen.Wait(0)
+        Citizen.Wait(10)
         if CurrentAction ~= nil then
             SetTextComponentFormat('STRING')
             AddTextComponentString(CurrentActionMsg)
             DisplayHelpTextFromStringLabel(0, 0, 1, -1)
-            if IsControlJustReleased(0, 38) then
-                if CurrentAction == 'turtle_harvest' then
-                    TriggerServerEvent('esx_turtle:startHarvestTurtle')
+            if IsControlJustReleased(0, Keys['E']) then
+                isInZone = true -- unless we set this boolean to false, we will always freeze the user
+                if CurrentAction == 'exitMarker' then
+                    isInZone = false -- do not freeze user
+                    TriggerEvent('esx_turtle:freezePlayer', false)
+                    TriggerEvent('esx_turtle:hasExitedMarker', lastZone)
+                    Citizen.Wait(15000)
+                    elseif CurrentAction == 'turtle_harvest' then
+                        TriggerServerEvent('esx_turtle:startHarvestTurtle')
+                    elseif CurrentAction == 'turtle_treatment' then
+                        TriggerServerEvent('esx_turtle:startTransformTurtle')
+                    elseif CurrentAction == 'turtle_resell' then
+                        TriggerServerEvent('esx_turtle:startSellTurtle')
+                else
+                    isInZone = false
                 end
-                if CurrentAction == 'turtle_treatment' then
-                    TriggerServerEvent('esx_turtle:startTransformTurtle')
+
+                if isInZone then
+                    TriggerEvent('esx_turtle:freezePlayer', true)
                 end
-                if CurrentAction == 'turtle_resell' then
-                    TriggerServerEvent('esx_turtle:startSellTurtle')
-                end
+
                 CurrentAction = nil
             end
         end
     end
+end)
+
+RegisterNetEvent('esx_turtle:freezePlayer')
+AddEventHandler('esx_turtle:freezePlayer', function(freeze)
+    FreezeEntityPosition(GetPlayerPed(-1), freeze)
 end)

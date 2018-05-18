@@ -6,9 +6,13 @@ Config.MarkerColor  = {r = 100, g = 204, b = 100}
 Config.RequiredCopsTurtle = 0
 Config.Locale = 'fr'
 
+Config.TimeToFarm    = 3 * 1000
+Config.TimeToProcess = 5 * 1000
+Config.TimeToSell    = 1  * 1000
+
 -- Change coordinates !!!
 Config.Zones = {
-	TurtleFarm = 	   {x=-1993.33, y=-2647.89, z=-0.27},
-	TurtleTreatment =  {x=444.848, y=-221.779, z=56.01},
-	TurtleResell = 	   {x=-3020.22, y=42.73, z=10.11}
+	TurtleFarm = 	   {x=0, y=0, z=0},
+	TurtleTreatment =  {x=0, y=0, z=0},
+	TurtleResell = 	   {x=0, y=0, z=0}
 }

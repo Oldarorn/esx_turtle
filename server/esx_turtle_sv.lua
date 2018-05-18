@@ -33,11 +33,12 @@ local function HarvestTurtle(source)
 		return
 	end
 
-	SetTimeout(5000, function()
+	SetTimeout(Config.TimeToFarm, function()
 
 		if PlayersHarvestingTurtle[source] == true then
 
-			local xPlayer  = ESX.GetPlayerFromId(source)
+			local _source = source
+			local xPlayer  = ESX.GetPlayerFromId(_source)
 
 			local turtle = xPlayer.getInventoryItem('turtle')
 
@@ -81,7 +82,7 @@ local function TransformTurtle(source)
 		return
 	end
 
-	SetTimeout(10000, function()
+	SetTimeout(Config.TimeToProcess, function()
 
 		if PlayersTransformingTurtle[source] == true then
 
@@ -134,7 +135,7 @@ local function SellTurtle(source)
 		return
 	end
 
-	SetTimeout(7500, function()
+	SetTimeout(Config.TimeToSell, function()
 
 		if PlayersSellingTurtle[source] == true then
 
