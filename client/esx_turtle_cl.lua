@@ -76,6 +76,24 @@ AddEventHandler('esx_turtle:hasExitedMarker', function(zone)
         TriggerServerEvent('esx_turtle:stopSellTurtle')
 end)
 
+-- Render markers
+Citizen.CreateThread(function()
+    while true do
+
+        Wait(0)
+
+        local coords = GetEntityCoords(GetPlayerPed(-1))
+
+        for k,v in pairs(Config.Zones) do
+            if(GetDistanceBetweenCoords(coords, v.x, v.y, v.z, true) < Config.DrawDistance) then
+                DrawMarker(Config.MarkerType, v.x, v.y, v.z, 0.0, 0.0, 0.0, 0, 0.0, 0.0, Config.ZoneSize.x, Config.ZoneSize.y, Config.ZoneSize.z, Config.MarkerColor.r, Config.MarkerColor.g, Config.MarkerColor.b, 100, false, true, 2, false, false, false, false)
+            end
+        end
+
+    end
+end)
+
+
 -- RETURN NUMBER OF ITEMS FROM SERVER
 RegisterNetEvent('esx_turtle:ReturnInventory')
 AddEventHandler('esx_turtle:ReturnInventory', function(turtleNbr, turtlepNbr, jobName, currentZone)
@@ -115,6 +133,8 @@ Citizen.CreateThread(function()
 
     end
 end)
+
+
 
 -- Key Controls
 Citizen.CreateThread(function()
